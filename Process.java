@@ -7,10 +7,6 @@ public class Process {
         this.id = id;
     }
 
-    public void printId() {
-        System.out.println("Process id: " + this.id);
-    }
-
     public void onReceiveEvent() {
         System.out.println("P"+this.id+" RECEIVE EVENT");
     }

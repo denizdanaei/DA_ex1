@@ -1,16 +1,28 @@
 
+// Simulating Example 1 from the video (@2.50):
+// https://www.youtube.com/watch?v=y5HvzJjYhv8 
+
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello world!");
 
-        // Create two instances of a Process
-        Process p1 = new Process(11);
-        Process p2 = new Process(22);
-        p1.printId();
-        p2.printId();
+        Process[] processList = {
+            new Process(1),
+            new Process(2),
+            new Process(3)
+        };
 
+        Event[] eventList = {                               // Event names from the video:
+            new Event(processList[2], Event.Type.SEND),     // e31
+            new Event(processList[2], Event.Type.SEND),     // e32
+            new Event(processList[1], Event.Type.RECEIVE),  // e21
+            new Event(processList[1], Event.Type.SEND),     // e22
+            new Event(processList[0], Event.Type.RECEIVE),  // -
+            new Event(processList[0], Event.Type.RECEIVE)   // e11
+        };
 
-        Event e1 = new Event(p1, Event.Type.RECEIVE);
-        e1.trigger();
+        for (Event e : eventList) {
+            e.trigger();
+        }
+
     }
 }
