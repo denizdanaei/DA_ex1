@@ -11,13 +11,19 @@ public class Main {
             new Process(3)
         };
 
+        Message[] messageList = {
+            new Message(3, 1),
+            new Message(3, 2),
+            new Message(2, 1)
+        };
+
         Event[] eventList = {                               // Event names from the video:
-            new Event(processList[2], Event.Type.SEND),     // e31
-            new Event(processList[2], Event.Type.SEND),     // e32
-            new Event(processList[1], Event.Type.RECEIVE),  // e21
-            new Event(processList[1], Event.Type.SEND),     // e22
-            new Event(processList[0], Event.Type.RECEIVE),  // -
-            new Event(processList[0], Event.Type.RECEIVE)   // e11
+            new Event(processList[2], Event.Type.SEND, messageList[0]),     // e31
+            new Event(processList[2], Event.Type.SEND, messageList[1]),     // e32
+            new Event(processList[1], Event.Type.RECEIVE, messageList[1]),  // e21
+            new Event(processList[1], Event.Type.SEND, messageList[2]),     // e22
+            new Event(processList[0], Event.Type.RECEIVE, messageList[2]),  // - (becomes e12 later)
+            new Event(processList[0], Event.Type.RECEIVE, messageList[0])   // e11
         };
 
         for (Event e : eventList) {

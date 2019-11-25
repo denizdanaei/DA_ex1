@@ -7,11 +7,11 @@ public class Process {
         this.id = id;
     }
 
-    public void onReceiveEvent() {
-        System.out.println("P"+this.id+" RECEIVE EVENT");
+    public void onReceiveEvent(Message m) {
+        System.out.println("P"+this.id+" RECEIVE MESSAGE FROM P" + m.srcId);
     }
 
-    public void onSendEvent() {
-        System.out.println("P"+this.id+" SEND EVENT");
+    public void onSendEvent(Message m) {
+        System.out.println("P"+this.id+" SEND MESSAGE TO P" + m.dstId);
     }
 }
