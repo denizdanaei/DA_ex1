@@ -1,11 +1,11 @@
-DA_ex1
+# DA_ex1
 
-Currently, the main() contains simulation of the Example 1 from the video (@2.50):
-https://www.youtube.com/watch?v=y5HvzJjYhv8  
-
-compile: `javac Main.java Event.java Process.java Message.java`
-run: `java Main`
-
+Currently, the Main contains hardcoded simulation of the [Example 1][1] :  
+Compile and run with:  
+```
+javac Main.java Event.java Process.java Message.java
+java Main
+```
 
 TODO:
 - processList, messageList and eventList could be converted to List if needed
@@ -17,3 +17,6 @@ TODO:
 - test if it works correctly (try multiple scenarios)
 - convert it to distributed system, using RMI
 - test again
+
+
+[1]: https://youtu.be/y5HvzJjYhv8?t=176  
