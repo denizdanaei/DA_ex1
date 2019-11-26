@@ -1,10 +1,10 @@
 public class Message {
     public int srcId;
     public int dstId;
-    public int[] vectorClk;
-    public Message(int src, int dst) { // ,int[] VectorClk
-        this.srcId = src;
-        this.dstId = dst;
-        // this.vectorClk=vectorClk;
+    public VectorClock vectorClock;
+    public Message(Process src, Process dst, VectorClock vectorClk) { 
+        this.srcId = src.id;
+        this.dstId = dst.id;
+        this.vectorClock=src.vectorClock;
     }
-}
+}   

@@ -6,15 +6,18 @@ public class Main {
     public static void main(String[] args) {
 
         Process[] processList = {
-            new Process(1,3),
-            new Process(2,3),
-            new Process(3,3)
+            new Process(1),
+            new Process(2),
+            new Process(3)
         };
         
         Message[] messageList = {
-            new Message(3, 1),
-            new Message(3, 2),
-            new Message(2, 1)
+            new Message(processList[2], processList[0], processList[2].vectorClock),
+            
+            new Message(processList[2], processList[1], processList[2].vectorClock),
+            
+            new Message(processList[1], processList[0], processList[1].vectorClock),
+            
         };
 
         Event[] eventList = {                               // Event names from the video:

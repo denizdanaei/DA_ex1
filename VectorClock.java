@@ -1,25 +1,41 @@
 import java.util.Arrays;
 
+// import sun.security.util.Length;
+
 public class VectorClock{
+    int[] vectorClock;
 
-	public static int[] max(int[] vectorClock1, int[] vectorClock2)
-	{
-		int[] max = vectorClock1;
-		for (int i = 0; i < vectorClock1.length; i++)
+    public VectorClock (int numprocess){
+        vectorClock=new int[numprocess];
+    }
+
+    public void setOnSendEvent(int id){
+        vectorClock[id-1]++;
+    }
+    public void setOnDeliverEvent(int id, VectorClock m){
+        vectorClock[id-1]++;
+        for (int i = 0; i < vectorClock.length; i++)
 		{
-			if (vectorClock1[i] < vectorClock2[i])
-				max[i] = vectorClock2[i];
-		}
-		return max;
-	}
+			if (vectorClock[i] < m.vectorClock[i])
+                vectorClock[i] = m.vectorClock[i];
+        }
+    }
+	// public int[] max(VectorClock vectorClock, VectorClock vc2)
+	// {
+	// 	VectorClock max = vectorClock;
+	// 	for (int i = 0; i < numprocess; i++)
+	// 	{
+	// 		if (vectorClock.vectorClock[i] < vc2.vectorClock[i])
+    //             max.vectorClock[i] = vc2.vectorClock[i];
+    //     }
+    //     return max.vectorClock;
+	// }
 	public static int [] update_vectorClk(int[] vectorClock1, int[] vectorClock2){
-
-    
-    return vectorClock1;
+        //TODO    
+        return vectorClock1;
     }
     public static String toString(int[] vectorClock)
     {
-        return Arrays.toString(vectorClock);
-        
+        return Arrays.toString(vectorClock);  
     }
 }
