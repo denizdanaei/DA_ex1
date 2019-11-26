@@ -18,10 +18,6 @@ TODO:
 - convert it to distributed system, using RMI
 - test again
 
-*updates* 11/26/2019
-- new class: VectorClock
-- added vectorClk to process
-- added onDeliverEvent  to process (not completed)
 
 *Problems*  11/26/2019
 - Message should be Message(src, dst, VectorClk) so that we can compare the vectorclk upon delivery.
