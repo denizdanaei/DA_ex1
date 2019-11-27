@@ -12,6 +12,7 @@ public class Process {
         this.id = id;
         this.clock = new VectorClock(id, numProcesses);
         this.history = new HistoryList();
+        this.msgBuffer = new ArrayList<Message>();
     }
 
     public void onSendEvent(Message m) {
