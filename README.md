@@ -32,4 +32,11 @@ JUR comments 11/26/2019:
   a reference to an object, will it modify the object on the host machine? We'll see when we play with RMI
 
 
+JUR comments 12/26:
+- Process class now seems more or less finished (structure-wise, SES logic needs to be implemented)
+TODO:
+- delivery test, onDeliver event, check onSend and onReceive (was tired so might contain algorithmic mistakes)
+- don't be afraid to mess around, delete, change or do anything with the code -> its yours now :)
+- when the algorithm works -> make it RMI=ish, assemble the processList with IDs from RMI, pray.
+
 [1]: https://youtu.be/y5HvzJjYhv8?t=176  

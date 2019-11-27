@@ -3,7 +3,7 @@ public class Message {
     public int src;
     public int dst;
     public VectorClock timestamp;
-    public int history;         // FIXME: change to History type, or list of tuples or sth
+    public HistoryList history;
 
     public Message(int src, int dst) {
         this.src = src;
@@ -14,7 +14,7 @@ public class Message {
         this.timestamp = timestamp;
     }
 
-    public void addHistory(int history) {        // FIXME: change type
+    public void addHistory(HistoryList history) {
         this.history = history;
     }
 

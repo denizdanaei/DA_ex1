@@ -2,33 +2,53 @@ public class Process {
     
     public int id;
     public VectorClock clock;
-    public int history;         // FIXME: replace with correct type
+    public HistoryList history;
+    public List<Message> msgBuffer;
 
     public Process(int id, int numProcesses) {
         this.id = id;
         this.clock = new VectorClock(id, numProcesses);
+        this.history = new HistoryList();
     }
 
     public void onSendEvent(Message m) {
-        clock.tick();
-        m.addTimestamp(clock);
+        clock.tick();                   // Increase local clock
+        m.addTimestamp(clock);          // Add timestamp and history to message
         m.addHistory(this.history);
-        // System.out.println("P"+this.id+" SEND MESSAGE TO P" + m.dst + " W/ TIMESTAMP: " + m.timestamp.toString());
+        history.add(m.dst, clock);      // Update history list
+
+        System.out.println("P"+id+" SEND");
+        printState();
     }
 
     public void onReceiveEvent(Message m) {
-    
-        // System.out.println("P"+this.id+" RECEIVE MESSAGE FROM P" + m.src + " W/ TIMESTAMP: " + m.timestamp.toString());
+        
+        if (!deliveryTest()) {
+            messageBuffer.add(m);
+            return;
+        }
+        System.out.println("P"+id+" RECEIVE");
+        printState();
+        onDeliverEvent(m);
+        if (!messageBuffer.isEmpty()) {
+            onReceiveEvent(messageBuffer.remove(0));    // Pop message from msgBuffer
+        }
     }
 
     public void onDeliverEvent(Message m) {
-        // vectorClk[id-1]++;
+        clock.tick();
         // VectorClock.max(vectorClk, m.vectorClk); //uncomment when problem is fixed
- 
         // System.out.println("P"+this.id+" Delivered MESSAGE TO P" + m.dst+" "+ VectorClock.toString(vectorClk));
     }
 
-
-
-
+    public boolean deliveryTest() {
+        // TODO
+        return true;
+    }
+ 
+    // Debugging helpers
+    public void printState() {
+        System.out.println(clock.toString());
+        System.out.println(history.toString()+"\n");
+    }
 }

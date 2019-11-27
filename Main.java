@@ -28,11 +28,6 @@ public class Main {
 
         for (Event e : eventList) {
             e.trigger();
-            System.out.println(e.toString() + " EVENT");
-            for (Process p : processList) {
-                System.out.println("Process "+p.id+" "+p.clock.toString());
-            }
-            System.out.println();
         }
     }
 }
