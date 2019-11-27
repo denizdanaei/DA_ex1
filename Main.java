@@ -6,9 +6,9 @@ public class Main {
     public static void main(String[] args) {
 
         Process[] processList = {
-            new Process(1),
-            new Process(2),
-            new Process(3)
+            new Process(1, 3),
+            new Process(2, 3),
+            new Process(3, 3)
         };
         
         Message[] messageList = {
@@ -28,6 +28,11 @@ public class Main {
 
         for (Event e : eventList) {
             e.trigger();
+            System.out.println(e.toString() + " EVENT");
+            for (Process p : processList) {
+                System.out.println("Process "+p.id+" "+p.clock.toString());
+            }
+            System.out.println();
         }
     }
 }

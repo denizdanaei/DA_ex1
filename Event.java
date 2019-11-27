@@ -18,4 +18,9 @@ public class Event {
             this.process.onSendEvent(this.message);
         }
     }
+
+    public String toString() {
+        if (type == Type.RECEIVE) return "RECEIVE";
+        else return "SEND";
+    }
 }

@@ -1,6 +1,22 @@
 import java.util.Arrays;
 
-public class VectorClock{
+public class VectorClock {
+
+    private int id;
+    private int[] vector;
+
+    public VectorClock(int id, int size) {
+        this.id = id;
+        this.vector = new int[size];
+    }
+
+    public void tick() {
+        vector[id-1]++;
+    }
+
+    public String toString() {
+        return Arrays.toString(vector);    
+    }
 
 	public static int[] max(int[] vectorClock1, int[] vectorClock2)
 	{
@@ -12,14 +28,7 @@ public class VectorClock{
 		}
 		return max;
 	}
-	public static int [] update_vectorClk(int[] vectorClock1, int[] vectorClock2){
-
-    
-    return vectorClock1;
-    }
-    public static String toString(int[] vectorClock)
-    {
-        return Arrays.toString(vectorClock);
-        
+	public static int [] update_vectorClk(int[] vectorClock1, int[] vectorClock2) {
+        return vectorClock1;
     }
 }

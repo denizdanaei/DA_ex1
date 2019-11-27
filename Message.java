@@ -2,7 +2,7 @@ public class Message {
 
     public int src;
     public int dst;
-    public int timestamp;       // FIXME: change to VectorClock type
+    public VectorClock timestamp;
     public int history;         // FIXME: change to History type, or list of tuples or sth
 
     public Message(int src, int dst) {
@@ -10,7 +10,7 @@ public class Message {
         this.dst = dst;
     }
 
-    public void addTimestamp(int timestamp) {    // FIXME: change type
+    public void addTimestamp(VectorClock timestamp) {
         this.timestamp = timestamp;
     }
 
