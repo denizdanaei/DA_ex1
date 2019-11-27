@@ -1,10 +1,29 @@
 public class Message {
-    public int srcId;
-    public int dstId;
-    public VectorClock vectorClock;
-    public Message(Process src, Process dst, VectorClock vectorClk) { 
-        this.srcId = src.id;
-        this.dstId = dst.id;
-        this.vectorClock=src.vectorClock;
+
+    public int src;
+    public int dst;
+    public VectorClock timestamp;
+    public HistoryList history;
+
+    public Message(int src, int dst) {
+        this.src = src;
+        this.dst = dst;
+    }
+
+    public void addTimestamp(VectorClock timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public void addHistory(HistoryList history) {
+        this.history = history;
+    }
+
+    // Helper function
+    public void print() {
+        System.out.println("SRC: " + this.src);
+        System.out.println("DST: " + this.dst);
+        System.out.println("TIMESTAMP: " + this.timestamp);
+        System.out.println("HISTORY: " + this.history);
+        System.out.println("\n");
     }
 }   
