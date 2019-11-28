@@ -11,14 +11,14 @@ public class Main {
 			// Create Registry
 			Registry registry = LocateRegistry.createRegistry(1099);
             
-            int[][] destIDs = {{1,2}, {}, {1}};
-			String[][] messages = {{"1", "2"}, {}, {"3"}};
-			int[][] delays = {{5000, 0}, {}, {500}};
+            int[][] destIDs = {{}, {0}, {0,1}};
+			
+			int[][] delays = {{}, {50}, {100,20}};
 
 			for (int i = 0; i < numProcesses; i++)
 			{
                 Process process = new Process(i, numProcesses);
-				MyProcess p = new MyProcess(process, destIDs[i], messages[i], delays[i]);
+				MyProcess p = new MyProcess(process, destIDs[i], delays[i]); //
 				myThreads[i] = new Thread(p);
 			}
 			for (int i = 0; i < numProcesses; i++)
@@ -68,17 +68,10 @@ public class Main {
 
 class MyProcess implements Runnable
 {	
-    Message[] messageList = {
-        new Message(3, 1),
-        new Message(3, 2),
-        new Message(2, 1)
-    };
-	int[] destIDs;
-    String[] messages;
+    int[] destIDs;
 	Process process;
 	int[] delays;
-	public MyProcess(Process process, int[] destIDs, String[] messages, int[] delays) {
-		this.messages = messages;
+	public MyProcess(Process process, int[] destIDs, int[] delays) { //
 		this.destIDs = destIDs;
 		this.process = process;
 		this.delays = delays;
@@ -87,11 +80,11 @@ class MyProcess implements Runnable
 	public void run() {
 		for (int i = 0; i < destIDs.length; i++)
 		{
+            System.out.println("P"+process.id+ " try to P" + destIDs[i]); 
+				
 			try
 			{
-			    if(process.id == 2)
-			        Thread.sleep(1000);
-				process.onSendEvent(messageList[i]);
+				process.onSendEvent(destIDs[i], delays[i]);
 			}
 			catch (Exception e) {
 				System.err.println("Client exception: " + e.toString()); 

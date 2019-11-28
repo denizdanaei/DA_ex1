@@ -11,7 +11,7 @@ public class VectorClock {
     }
 
     public void tick() {
-        vector[id-1]++;
+        vector[id]++;
     }
 
     public String toString() {

@@ -44,12 +44,12 @@ public class HistoryList {
         }
     }
      */
-    public static boolean deliveryTest(int pid, VectorClock clock, Message m ){
+    public static boolean deliveryTest(int dst, VectorClock clock, Message m ){
         //returns false if massage can not be delivered
         for (HistoryItem item: m.history.history){
-            if(item.id==pid){
+            if(item.id==dst){
                 
-                System.out.println("message from"+ m.src+ " to "+ m.dst+ "with history P"+item.id +" to P" + pid);
+                System.out.println("message from"+ m.src+ " to "+ m.dst+ "with history P"+item.id +" to P" + dst);
              
                 return !VectorClock.isbehind(clock, m.timestamp);
             }

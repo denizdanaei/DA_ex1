@@ -7,9 +7,6 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedList;
 
 public class Process extends UnicastRemoteObject implements SchiperEggliSandoz_RMI{
     
@@ -39,14 +36,16 @@ public class Process extends UnicastRemoteObject implements SchiperEggliSandoz_R
 
     }
 
-    public synchronized void onSendEvent(Message m) throws MalformedURLException, RemoteException, NotBoundException {
+    public synchronized void onSendEvent(int dst, int delay) throws MalformedURLException, RemoteException, NotBoundException {
 
-        SchiperEggliSandoz_RMI dest = (SchiperEggliSandoz_RMI) Naming.lookup(m.dst + "-" + m.src);
-
+        Message m = new Message(id, dst);
+        
+        
         m.addHistory(this.history);
         clock.tick();                   // Increase local clock
         m.addTimestamp(clock);          // Add timestamp and history to message
         printState();
+        SchiperEggliSandoz_RMI dest = (SchiperEggliSandoz_RMI) Naming.lookup(dst + "-" + m.src);
 
         history.add(m.dst, clock);      // Update history list
         //add or update(if there is an item with same id, update)
@@ -54,7 +53,6 @@ public class Process extends UnicastRemoteObject implements SchiperEggliSandoz_R
         printState();
 
         System.out.println("Sending - ");
-        int wait = (int) (Math.random()*10000);
 
         new java.util.Timer().schedule( 
                 new java.util.TimerTask() {
@@ -67,9 +65,8 @@ public class Process extends UnicastRemoteObject implements SchiperEggliSandoz_R
                         }
                     }
                 },
-                wait
+                delay
         );
-        
     }
 
     public synchronized void receive(Message m) {
@@ -99,8 +96,6 @@ public class Process extends UnicastRemoteObject implements SchiperEggliSandoz_R
         //deleting outdated history items
     
     }
-
-    private void updateHistoryBuffer(){}
 
     /*public boolean deliveryTest(Message m) {
 
