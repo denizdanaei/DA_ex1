@@ -1,4 +1,6 @@
-public class Message {
+import java.io.Serializable;
+
+public class Message implements Serializable{
 
     public int src;
     public int dst;
@@ -8,6 +10,9 @@ public class Message {
     public Message(int src, int dst) {
         this.src = src;
         this.dst = dst;
+        print();
+        // this.timestamp= timestamp;
+        // this.history=history;
     }
 
     public void addTimestamp(VectorClock timestamp) {

@@ -1,31 +1,78 @@
 import java.util.List;
 import java.util.ArrayList;
+import java.net.MalformedURLException;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
 
-public class Process {
+public class Process extends UnicastRemoteObject implements SchiperEggliSandoz_RMI{
     
+	private static final long serialVersionUID = 1L;
     public int id;
     public VectorClock clock;
     public HistoryList history;
     public List<Message> msgBuffer;
 
-    public Process(int id, int numProcesses) {
+    public Process(int id, int numProcesses) throws RemoteException {
+        super();
         this.id = id;
         this.clock = new VectorClock(id, numProcesses);
         this.history = new HistoryList();
         this.msgBuffer = new ArrayList<Message>();
+        
+        try{
+        	// Binding the remote object (stub) in the local registry
+        	Registry registry = LocateRegistry.getRegistry();
+
+        	registry.rebind("SchiperEggliSandoz-" + id, this);
+        	System.err.println("Process " + id + " ready");
+        } catch (Exception e) {
+        	System.err.println("Server exception: " + e.toString());
+        	e.printStackTrace();
+     }
+
     }
 
-    public void onSendEvent(Message m) {
+    public synchronized void onSendEvent(Message m) throws MalformedURLException, RemoteException, NotBoundException {
+
+        SchiperEggliSandoz_RMI dest = (SchiperEggliSandoz_RMI) Naming.lookup(m.dst + "-" + m.src);
+
+        m.addHistory(this.history);
         clock.tick();                   // Increase local clock
         m.addTimestamp(clock);          // Add timestamp and history to message
-        m.addHistory(this.history);
+        printState();
+
         history.add(m.dst, clock);      // Update history list
         //add or update(if there is an item with same id, update)
-        System.out.println("P"+id+" SEND to P"+ m.dst);
+        System.out.println("P"+id+" SENT to P"+ m.dst);
         printState();
+
+        System.out.println("Sending - ");
+        int wait = (int) (Math.random()*10000);
+
+        new java.util.Timer().schedule( 
+                new java.util.TimerTask() {
+                    @Override
+                    public void run() {
+                        try {
+                            dest.receive(m);
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                wait
+        );
+        
     }
 
-    public void onReceiveEvent(Message m) {
+    public synchronized void receive(Message m) {
         
         if (!HistoryList.deliveryTest(id, clock, m)) {
             
@@ -41,11 +88,11 @@ public class Process {
         printState();
 
         if (!msgBuffer.isEmpty()) {
-            onReceiveEvent(msgBuffer.remove(0));    // Pop message from msgBuffer
+            receive(msgBuffer.remove(0));    // Pop message from msgBuffer
         }
     }
 
-    public void onDeliverEvent(Message m) {
+    private synchronized void onDeliverEvent(Message m) {
         clock.tick();
         // VectorClock.max(vectorClk, m.vectorClk); //uncomment when problem is fixed
         // System.out.println("P"+this.id+" Delivered MESSAGE TO P" + m.dst+" "+ VectorClock.toString(vectorClk));
@@ -71,7 +118,7 @@ public class Process {
     }
     */
     // Debugging helpers
-    public void printState() {
+    private void printState() {
         System.out.println("clock: "+clock.toString());
         System.out.println("history: "+history.toString()+"\n");
     }

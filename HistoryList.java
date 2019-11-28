@@ -18,9 +18,32 @@ public class HistoryList {
     }
 
     public void add(int id, VectorClock timestamp) {
+        
         this.history.add(new HistoryItem(id, timestamp));
+        
+        System.out.println("added item "+toString());
     }
-
+    /**
+     * 
+        if (history.isEmpty()){
+            
+            System.out.println("history isempty");
+            this.history.add(new HistoryItem(id, timestamp));
+        }
+        else{
+            for (HistoryItem item: history){
+                if(id==item.id){ 
+                    System.out.println("item already exists "+toString());
+                }
+                else{
+                    
+                    System.out.println("item added"+toString());
+                    this.history.add(new HistoryItem(id, timestamp));
+                }
+        }
+        }
+    }
+     */
     public static boolean deliveryTest(int pid, VectorClock clock, Message m ){
         //returns false if massage can not be delivered
         for (HistoryItem item: m.history.history){
