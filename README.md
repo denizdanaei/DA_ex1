@@ -18,10 +18,6 @@ TODO:
 - convert it to distributed system, using RMI
 - test again
 
-<<<<<<< HEAD
-
-=======
->>>>>>> messageThrowaway
 *Problems*  11/26/2019
 - Message should be Message(src, dst, VectorClk) so that we can compare the vectorclk upon delivery.
 So how shall we change Messages in messageList.Main?

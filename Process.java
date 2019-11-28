@@ -20,20 +20,26 @@ public class Process {
         m.addTimestamp(clock);          // Add timestamp and history to message
         m.addHistory(this.history);
         history.add(m.dst, clock);      // Update history list
-
-        System.out.println("P"+id+" SEND");
+        //add or update(if there is an item with same id, update)
+        System.out.println("P"+id+" SEND to P"+ m.dst);
         printState();
     }
 
     public void onReceiveEvent(Message m) {
         
-        if (!deliveryTest()) {
-            msgBuffer.add(m);               // Push message to msgBuffer
+        if (!HistoryList.deliveryTest(id, clock, m)) {
+            
+            System.out.println(m.src +" to " +m.dst +"cannot be delivered");
+             
+            msgBuffer.add(m);               // Push message to msgBuffer is delivery test failed
             return;
         }
-        System.out.println("P"+id+" RECEIVE");
+
+        onDeliverEvent(m);        
+        System.out.println(m.src +" to " +m.dst +"will now be delivered");
+        // System.out.println("P"+id+" Delivered");
         printState();
-        onDeliverEvent(m);
+
         if (!msgBuffer.isEmpty()) {
             onReceiveEvent(msgBuffer.remove(0));    // Pop message from msgBuffer
         }
@@ -43,18 +49,30 @@ public class Process {
         clock.tick();
         // VectorClock.max(vectorClk, m.vectorClk); //uncomment when problem is fixed
         // System.out.println("P"+this.id+" Delivered MESSAGE TO P" + m.dst+" "+ VectorClock.toString(vectorClk));
+        //deleting outdated history items
+    
     }
 
     private void updateHistoryBuffer(){}
 
-    public boolean deliveryTest() {
+    /*public boolean deliveryTest(Message m) {
+
+        if(HistoryList.historycheck(Process, m))
+            {return false;}
         // TODO
+        //iterate through history
+        //if history item with dest. id
+            //check the timestamp
+            //if dest. timestamp behind the msg timestamp
+                //reject
+            //else
+                //accept
         return true;
     }
- 
+    */
     // Debugging helpers
     public void printState() {
-        System.out.println(clock.toString());
-        System.out.println(history.toString()+"\n");
+        System.out.println("clock: "+clock.toString());
+        System.out.println("history: "+history.toString()+"\n");
     }
 }

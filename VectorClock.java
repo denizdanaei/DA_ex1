@@ -18,6 +18,20 @@ public class VectorClock {
         return Arrays.toString(vector);    
     }
 
+    public static boolean isbehind(VectorClock p, VectorClock m)
+	{	
+		//p.clk is behind m.timestamp
+		for (int i = 0; i < p.vector.length; i++)
+		{
+			if (p.vector[i] < m.vector[i])
+			{
+                System.out.println(p.vector[i]+"is behind " + m.vector[i]);
+                return true;
+			}
+		}
+		return false;
+	}
+	
     // this is now in tick()
     // public void setOnSendEvent(int id){
     //     vectorClock[id-1]++;
