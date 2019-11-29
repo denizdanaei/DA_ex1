@@ -1,8 +1,14 @@
 import java.util.List;
 import java.util.Vector;
+import java.io.Serializable;
+// import java.io.Collections;
 
-public class HistoryList {
-    private class HistoryItem {
+public class HistoryList implements Serializable{
+    private static final long serialVersionUID = 11L;
+    
+    private class HistoryItem implements Serializable{
+        private static final long serialVersionUID = 111L;
+    
         public int id;
         public VectorClock timestamp;
         public HistoryItem(int id, VectorClock timestamp) {
@@ -20,36 +26,16 @@ public class HistoryList {
     public void add(int id, VectorClock timestamp) {
         
         this.history.add(new HistoryItem(id, timestamp));
-        
-        System.out.println("added item "+toString());
     }
-    /**
-     * 
-        if (history.isEmpty()){
-            
-            System.out.println("history isempty");
-            this.history.add(new HistoryItem(id, timestamp));
-        }
-        else{
-            for (HistoryItem item: history){
-                if(id==item.id){ 
-                    System.out.println("item already exists "+toString());
-                }
-                else{
-                    
-                    System.out.println("item added"+toString());
-                    this.history.add(new HistoryItem(id, timestamp));
-                }
-        }
-        }
-    }
-     */
+    // public void copy(HistoryList newlist){
+    //     history.addAll(newlist.history);
+    // }
     public static boolean deliveryTest(int dst, VectorClock clock, Message m ){
         //returns false if massage can not be delivered
         for (HistoryItem item: m.history.history){
             if(item.id==dst){
                 
-                System.out.println("message from"+ m.src+ " to "+ m.dst+ "with history P"+item.id +" to P" + dst);
+                // System.out.println("message from"+ m.src+ " to "+ m.dst+ "with history P"+item.id +" to P" + dst);
              
                 return !VectorClock.isbehind(clock, m.timestamp);
             }

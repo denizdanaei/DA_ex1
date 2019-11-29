@@ -27,7 +27,7 @@ public class Process extends UnicastRemoteObject implements SchiperEggliSandoz_R
         	// Binding the remote object (stub) in the local registry
         	Registry registry = LocateRegistry.getRegistry();
 
-        	registry.rebind("SchiperEggliSandoz-" + id, this);
+        	registry.rebind(Integer.toString(id), this);
         	System.err.println("Process " + id + " ready");
         } catch (Exception e) {
         	System.err.println("Server exception: " + e.toString());
@@ -37,22 +37,23 @@ public class Process extends UnicastRemoteObject implements SchiperEggliSandoz_R
     }
 
     public synchronized void onSendEvent(int dst, int delay) throws MalformedURLException, RemoteException, NotBoundException {
-
+        
+        System.out.println( " Sending from "+id +" to " +dst+"...\n");
         Message m = new Message(id, dst);
-        
-        
-        m.addHistory(this.history);
+        m.addHistory(history);
         clock.tick();                   // Increase local clock
         m.addTimestamp(clock);          // Add timestamp and history to message
-        printState();
-        SchiperEggliSandoz_RMI dest = (SchiperEggliSandoz_RMI) Naming.lookup(dst + "-" + m.src);
-
-        history.add(m.dst, clock);      // Update history list
+        
+        // m.print();
+        SchiperEggliSandoz_RMI dest = (SchiperEggliSandoz_RMI) Naming.lookup(Integer.toString(dst));
+        VectorClock tempclk= new VectorClock(id, 3);
+        tempclk.setVector(clock);
+        history.add(m.dst, tempclk);      // Update history list
         //add or update(if there is an item with same id, update)
-        System.out.println("P"+id+" SENT to P"+ m.dst);
-        printState();
+        // System.out.println("P"+id+" SENT to P"+ m.dst);
+        // printState();
 
-        System.out.println("Sending - ");
+        // System.out.println("Sending - ");
 
         new java.util.Timer().schedule( 
                 new java.util.TimerTask() {
@@ -67,22 +68,22 @@ public class Process extends UnicastRemoteObject implements SchiperEggliSandoz_R
                 },
                 delay
         );
+        
     }
 
     public synchronized void receive(Message m) {
         
         if (!HistoryList.deliveryTest(id, clock, m)) {
             
-            System.out.println(m.src +" to " +m.dst +"cannot be delivered");
+            System.out.println(m.src +" to " +m.dst +" cannot be delivered");
              
             msgBuffer.add(m);               // Push message to msgBuffer is delivery test failed
             return;
         }
 
         onDeliverEvent(m);        
-        System.out.println(m.src +" to " +m.dst +"will now be delivered");
-        // System.out.println("P"+id+" Delivered");
-        printState();
+                // System.out.println("P"+id+" Delivered");
+        
 
         if (!msgBuffer.isEmpty()) {
             receive(msgBuffer.remove(0));    // Pop message from msgBuffer
@@ -90,7 +91,10 @@ public class Process extends UnicastRemoteObject implements SchiperEggliSandoz_R
     }
 
     private synchronized void onDeliverEvent(Message m) {
-        clock.tick();
+        System.out.println(m.src +" to " +m.dst +" will now be delivered");
+        m.print();
+        clock.updateOnDelivery(m.timestamp);
+        printState();
         // VectorClock.max(vectorClk, m.vectorClk); //uncomment when problem is fixed
         // System.out.println("P"+this.id+" Delivered MESSAGE TO P" + m.dst+" "+ VectorClock.toString(vectorClk));
         //deleting outdated history items
@@ -114,7 +118,6 @@ public class Process extends UnicastRemoteObject implements SchiperEggliSandoz_R
     */
     // Debugging helpers
     private void printState() {
-        System.out.println("clock: "+clock.toString());
-        System.out.println("history: "+history.toString()+"\n");
+        System.out.println("P"+id+" clock: "+clock.toString() +" history: "+history.toString()+"\n");
     }
 }

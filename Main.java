@@ -13,7 +13,7 @@ public class Main {
             
             int[][] destIDs = {{}, {0}, {0,1}};
 			
-			int[][] delays = {{}, {50}, {100,20}};
+			int[][] delays = {{}, {50}, {100,10}};
 
 			for (int i = 0; i < numProcesses; i++)
 			{
@@ -21,8 +21,10 @@ public class Main {
 				MyProcess p = new MyProcess(process, destIDs[i], delays[i]); //
 				myThreads[i] = new Thread(p);
 			}
+			
+					
 			for (int i = 0; i < numProcesses; i++)
-			{
+			{	
 				myThreads[i].start();
 			}
 			
@@ -30,7 +32,8 @@ public class Main {
 			System.err.println("Could not create registry exception: " + e.toString()); 
 			e.printStackTrace(); 
 		} 
-		
+	// Thread.sleep(1000);	
+	// System.exit(0);
 	}
 
 
@@ -80,11 +83,17 @@ class MyProcess implements Runnable
 	public void run() {
 		for (int i = 0; i < destIDs.length; i++)
 		{
-            System.out.println("P"+process.id+ " try to P" + destIDs[i]); 
+            // System.out.println("P"+process.id+ " try to P" + destIDs[i]); 
 				
 			try
 			{
 				process.onSendEvent(destIDs[i], delays[i]);
+				// if(i== 0){Thread.sleep(100);}
+
+				// if(i== 2){Thread.sleep(1000);}
+
+				// if(i== 1){Thread.sleep(1000);}
+				
 			}
 			catch (Exception e) {
 				System.err.println("Client exception: " + e.toString()); 

@@ -10,7 +10,7 @@ public class Message implements Serializable{
     public Message(int src, int dst) {
         this.src = src;
         this.dst = dst;
-        print();
+        // print();
         // this.timestamp= timestamp;
         // this.history=history;
     }
@@ -19,16 +19,20 @@ public class Message implements Serializable{
         this.timestamp = timestamp;
     }
 
-    public void addHistory(HistoryList history) {
-        this.history = history;
-    }
+    public void addHistory(HistoryList newhistory) {
 
+        this.history = new HistoryList();
+        // history.copy(newhistory);
+        
+    }
+    // public void clone()
+	// {
+	    
+	// }
+	
     // Helper function
     public void print() {
-        System.out.println("SRC: " + this.src);
-        System.out.println("DST: " + this.dst);
-        System.out.println("TIMESTAMP: " + this.timestamp);
-        System.out.println("HISTORY: " + this.history);
+        System.out.println("Message from P" + this.src+ " to P" + this.dst+" TIMESTAMP: " + this.timestamp+ " HISTORY: " + this.history);
         System.out.println("\n");
     }
 }   

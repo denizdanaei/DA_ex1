@@ -1,7 +1,9 @@
 import java.util.Arrays;
+import java.io.Serializable;
 
-public class VectorClock {
-
+public class VectorClock implements Serializable{
+    private static final long serialVersionUID = 2L;
+   
     private int id;
     private int[] vector;
 
@@ -9,7 +11,14 @@ public class VectorClock {
         this.id = id;
         this.vector = new int[size];
     }
+    public int[] getVector(){
+        return vector;
+    }
+    public void setVector(VectorClock vectorClock){
 
+        this.vector=vectorClock.vector;
+
+    }
     public void tick() {
         vector[id]++;
     }
@@ -37,15 +46,15 @@ public class VectorClock {
     //     vectorClock[id-1]++;
     // }
 
-    // public void setOnDeliverEvent(int id, VectorClock m){
-    //     vectorClock[id]++;
-    //     for (int i = 0; i < vectorClock.length; i++)
-	// 	{
-	// 		if (vectorClock1[i] < vectorClock2[i])
-	// 			max[i] = vectorClock2[i];
-	// 	}
-	// 	return max;
-    // }
+    public void updateOnDelivery(VectorClock m){
+        tick();
+        for (int i = 0; i < vector.length; i++)
+		{
+			if (vector[i] < m.vector[i])
+				vector[i] = m.vector[i];
+		}
+		// return vector;
+    }
     
 	// public static int [] update_vectorClk(int[] vectorClock1, int[] vectorClock2) {
     //     return vectorClock1;
