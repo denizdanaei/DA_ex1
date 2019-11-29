@@ -15,16 +15,18 @@ public class VectorClock implements Serializable{
         return vector;
     }
     public void setVector(VectorClock vectorClock){
-
-        this.vector=vectorClock.vector;
-
+        
+        this.vector=vectorClock.vector.clone();
     }
+    public int getid(){
+        return id;
+    }
+    public void setid(VectorClock vectorClock){
+        this.id=vectorClock.id;
+    }
+
     public void tick() {
         vector[id]++;
-    }
-
-    public String toString() {
-        return Arrays.toString(vector);    
     }
 
     public static boolean isbehind(VectorClock p, VectorClock m)
@@ -40,12 +42,7 @@ public class VectorClock implements Serializable{
 		}
 		return false;
 	}
-	
-    // this is now in tick()
-    // public void setOnSendEvent(int id){
-    //     vectorClock[id-1]++;
-    // }
-
+    
     public void updateOnDelivery(VectorClock m){
         tick();
         for (int i = 0; i < vector.length; i++)
@@ -53,10 +50,10 @@ public class VectorClock implements Serializable{
 			if (vector[i] < m.vector[i])
 				vector[i] = m.vector[i];
 		}
-		// return vector;
     }
+
     
-	// public static int [] update_vectorClk(int[] vectorClock1, int[] vectorClock2) {
-    //     return vectorClock1;
-    // }
+    public String toString() {
+        return Arrays.toString(vector);    
+    }
 }

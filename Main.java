@@ -11,9 +11,9 @@ public class Main {
 			// Create Registry
 			Registry registry = LocateRegistry.createRegistry(1099);
             
-            int[][] destIDs = {{}, {0}, {0,1}};
+            int[][] destIDs = {{}, {}, {0,1}};
 			
-			int[][] delays = {{}, {50}, {100,10}};
+			int[][] delays = {{}, {}, {100,10}};
 
 			for (int i = 0; i < numProcesses; i++)
 			{
@@ -23,7 +23,7 @@ public class Main {
 			}
 			
 					
-			for (int i = 0; i < numProcesses; i++)
+			for (int i = 2; i >=0; i--)
 			{	
 				myThreads[i].start();
 			}
@@ -87,12 +87,13 @@ class MyProcess implements Runnable
 				
 			try
 			{
+				System.out.println("\n\n");
 				process.onSendEvent(destIDs[i], delays[i]);
 				// if(i== 0){Thread.sleep(100);}
 
 				// if(i== 2){Thread.sleep(1000);}
 
-				// if(i== 1){Thread.sleep(1000);}
+				if(i== 1){Thread.sleep(1000);}
 				
 			}
 			catch (Exception e) {
