@@ -1,8 +1,24 @@
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-// Simulating Example 1 from the video (@2.50):
 // https://www.youtube.com/watch?v=y5HvzJjYhv8 
-
+/* Simulating Example 1 from the video (@2.50):
+*	Conditions to have 
+*	int[][] destIDs = {{}, {0}, {0,1}};	
+*	int[][] delays = {{}, {300}, {1000,10}};
+*	if(process.id==1){Thread.sleep(50);}
+*/
+/* Simulating Example 2 from the video (@9.57):
+*	Conditions to have 
+*   int[][] destIDs = {{1,2}, {}, {1}};
+*   int[][] delays = {{1000,30}, {}, {100}};
+*	if(process.id==2){Thread.sleep(500);}
+*/
+/* Simulating Example 3 from the video (@13.13):
+*	Conditions to have 
+*	int[][] destIDs = {{}, {0}, {0,1}};	
+*	int[][] delays = {{}, {300}, {1000,10}};
+*	if(process.id==1){Thread.sleep(50);}
+*/
 public class Main {
     public static void main(String[] args) {
         int numProcesses = 3;
@@ -11,9 +27,8 @@ public class Main {
 			// Create Registry
 			Registry registry = LocateRegistry.createRegistry(1099);
             
-            int[][] destIDs = {{}, {0}, {0,1}};
-			
-			int[][] delays = {{}, {300}, {1000,10}};
+            int[][] destIDs = {{1,2}, {}, {1}};
+			int[][] delays = {{1000,30}, {}, {100}};
 
 			for (int i = 0; i < numProcesses; i++)
 			{
@@ -55,8 +70,8 @@ class MyProcess implements Runnable
 				
 			try
 			{
-				if(process.id==1){
-				Thread.sleep(50);}
+				if(process.id==2){
+				Thread.sleep(500);}
 				// if(i== 1){Thread.sleep(500);}
 				// if(i== 2){Thread.sleep(500);}
 
