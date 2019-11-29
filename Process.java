@@ -38,7 +38,7 @@ public class Process extends UnicastRemoteObject implements SchiperEggliSandoz_R
 
     public synchronized void onSendEvent(int dst, int delay) throws MalformedURLException, RemoteException, NotBoundException {
         
-        System.out.println( "Sending from "+id +" to " +dst);
+        System.out.println( "Sending from "+id +" to " +dst+ " with delay "+delay);
         
         clock.tick();// Increase local clock
         VectorClock tempclk= new VectorClock(id, 3);
@@ -49,13 +49,12 @@ public class Process extends UnicastRemoteObject implements SchiperEggliSandoz_R
         // m.print();
 
         SchiperEggliSandoz_RMI dest = (SchiperEggliSandoz_RMI) Naming.lookup(Integer.toString(dst));
-        
-        
+                
         Message m = new Message(id, dst,tempclk, tempHistory);
-        m.print();
+        // m.print();
         history.additem(m.dst, tempclk);      // Update history list
         //add or update(if there is an item with same id, update)
-        printState();
+        // printState();
 
         new java.util.Timer().schedule( 
                 new java.util.TimerTask() {
@@ -75,11 +74,11 @@ public class Process extends UnicastRemoteObject implements SchiperEggliSandoz_R
 
     public synchronized void receive(Message m) {
         
-        System.out.println("\nRecieved Message at P"+m.dst+" from P"+m.src);
+        // System.out.println("\nRecieved Message at P"+m.dst+" from P"+m.src);
         m.print();
 
         if (!HistoryList.deliveryTest(id, clock, m.history)) {
-            System.out.println(m.src +" to " +m.dst +" cannot be delivered. Message added to Buffer.");
+            System.out.println(m.src +" to " +m.dst +" CANNOT be delivered. Message PUSHED to Buffer.");
             msgBuffer.add(m);         // Push message to msgBuffer is delivery test failed
             return;
         }
@@ -93,6 +92,7 @@ public class Process extends UnicastRemoteObject implements SchiperEggliSandoz_R
         System.out.println(m.src +" to " +m.dst +" will now be delivered");
         // m.print();
         clock.updateOnDelivery(m.timestamp);
+        history.copyhistory(m.history);
         printState();
         //deleting outdated history items
     }

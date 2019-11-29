@@ -33,13 +33,13 @@ public class HistoryList implements Serializable{
     public static boolean deliveryTest(int dst, VectorClock clock, HistoryList msg_History ){
         //returns false if massage can not be delivered
         if(msg_History.history.isEmpty()){
-            System.out.println("msg_History is empty\n");
+            // System.out.println("msg_History is empty\n");
             return true;
         }
         else{
             for (HistoryItem item: msg_History.history){
                 if(item.id==dst){
-                    System.out.println("item.id"+item.id+"==dst"+dst);
+                    // System.out.println("item.id"+item.id+"==dst"+dst);
                     // System.out.println("message from"+ m.src+ " to "+ m.dst+ "with history P"+item.id +" to P" + dst);
                 
                     return !VectorClock.isbehind(clock, item.timestamp);

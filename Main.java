@@ -11,9 +11,9 @@ public class Main {
 			// Create Registry
 			Registry registry = LocateRegistry.createRegistry(1099);
             
-            int[][] destIDs = {{}, {}, {0,1}};
+            int[][] destIDs = {{}, {0}, {0,1}};
 			
-			int[][] delays = {{}, {}, {100,10}};
+			int[][] delays = {{}, {300}, {1000,10}};
 
 			for (int i = 0; i < numProcesses; i++)
 			{
@@ -35,38 +35,6 @@ public class Main {
 	// Thread.sleep(1000);	
 	// System.exit(0);
 	}
-
-
-     /*   
-    Process[] processList = {
-        new Process(1, 3),
-        new Process(2, 3),
-        new Process(3, 3)
-    };
-            
-    Message[] messageList = {
-        new Message(3, 1),
-        new Message(3, 2),
-        new Message(2, 1)
-    };
-
-
-
-
-        Event[] eventList = {                               // Event names from the video:
-            new Event(processList[2], Event.Type.SEND, messageList[0]),     // e31
-            new Event(processList[2], Event.Type.SEND, messageList[1]),     // e32
-            new Event(processList[1], Event.Type.RECEIVE, messageList[1]),  // e21
-            new Event(processList[1], Event.Type.SEND, messageList[2]),     // e22
-            new Event(processList[0], Event.Type.RECEIVE, messageList[2]),  // - (becomes e12 later)
-            new Event(processList[0], Event.Type.RECEIVE, messageList[0])   // e11
-        };
-
-        for (Event e : eventList) {
-            e.trigger();
-        }
-    }
-    */
 }
 
 class MyProcess implements Runnable
@@ -87,13 +55,13 @@ class MyProcess implements Runnable
 				
 			try
 			{
+				if(process.id==1){
+				Thread.sleep(50);}
+				// if(i== 1){Thread.sleep(500);}
+				// if(i== 2){Thread.sleep(500);}
+
 				System.out.println("\n\n");
 				process.onSendEvent(destIDs[i], delays[i]);
-				// if(i== 0){Thread.sleep(100);}
-
-				// if(i== 2){Thread.sleep(1000);}
-
-				if(i== 1){Thread.sleep(1000);}
 				
 			}
 			catch (Exception e) {

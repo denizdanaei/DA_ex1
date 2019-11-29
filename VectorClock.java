@@ -36,7 +36,7 @@ public class VectorClock implements Serializable{
 		{
 			if (p.vector[i] < m.vector[i])
 			{
-                System.out.println(p.vector[i]+"is behind " + m.vector[i]);
+                System.out.println("clockVector "+p.vector[i]+" is behind " + m.vector[i]);
                 return true;
 			}
 		}
