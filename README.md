@@ -1,11 +1,8 @@
 # DA_ex1
 
 Currently, the Main contains hardcoded simulation of the [Example 1][1] :  
-Compile and run with:  
-```
-javac Main.java Event.java Process.java Message.java
-java Main
-```
+Compile and run with: `./buildAndRun.py`  
+(make sure you have execute permission w/ `chmod +x buildAndRun.py`)  
 
 TODO:
 - processList, messageList and eventList could be converted to List if needed
