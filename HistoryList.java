@@ -7,10 +7,9 @@ public class HistoryList {
         public VectorClock timestamp;
         public HistoryItem(int id, VectorClock timestamp) {
             this.id = id;
-            this.timestamp = timestamp;
+            this.timestamp = new VectorClock(timestamp);        // Copy timestamp
         }
     }
-
     private List<HistoryItem> history;
     
     public HistoryList() {

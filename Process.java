@@ -10,18 +10,18 @@ public class Process {
 
     public Process(int id, int numProcesses) {
         this.id = id;
-        this.clock = new VectorClock(id, numProcesses);
+        this.clock = new VectorClock(numProcesses);
         this.history = new HistoryList();
         this.msgBuffer = new ArrayList<Message>();
     }
 
     public void onSendEvent(Message m) {
-        clock.tick();                   // Increase local clock
+        System.out.println("P"+id+" SEND to P"+ m.dst);
+        clockTick();                    // Increase local clock
         m.addTimestamp(clock);          // Add timestamp and history to message
         m.addHistory(this.history);
         history.add(m.dst, clock);      // Update history list
         //add or update(if there is an item with same id, update)
-        System.out.println("P"+id+" SEND to P"+ m.dst);
         printState();
     }
 
@@ -30,7 +30,7 @@ public class Process {
         System.out.println("P"+id+" RECEIVE FROM P"+m.src);
         if (!HistoryList.deliveryTest(id, clock, m)) {
             System.out.println("CAN'T DELIVER\n");
-            msgBuffer.add(m);               // Push message to msgBuffer is delivery test failed
+            msgBuffer.add(m);
             return;
         }
 
@@ -43,7 +43,7 @@ public class Process {
     }
 
     public void onDeliverEvent(Message m) {
-        clock.tick();
+        clockTick();
         // VectorClock.max(vectorClk, m.vectorClk); //uncomment when problem is fixed
         // System.out.println("P"+this.id+" Delivered MESSAGE TO P" + m.dst+" "+ VectorClock.toString(vectorClk));
         //deleting outdated history items
@@ -67,6 +67,11 @@ public class Process {
         return true;
     }
     */
+
+    void clockTick() {
+        this.clock.increase(this.id - 1);
+    }
+
     // Debugging helpers
     public void printState() {
         System.out.println("clock: "+clock.toString());

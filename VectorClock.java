@@ -2,16 +2,17 @@ import java.util.Arrays;
 
 public class VectorClock {
 
-    private int id;
     private int[] vector;
 
-    public VectorClock(int id, int size) {
-        this.id = id;
+    public VectorClock(int size) {              // Default constructor
         this.vector = new int[size];
     }
+    public VectorClock(VectorClock clk) {       // Copy constructor
+        this.vector = clk.vector.clone();
+    }
 
-    public void tick() {
-        vector[id-1]++;
+    public void increase(int ndx) {
+        this.vector[ndx]++;
     }
 
     public String toString() {
