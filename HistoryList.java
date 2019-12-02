@@ -26,7 +26,7 @@ public class HistoryList {
         for (HistoryItem item: m.history.history){
             if(item.id==pid){
                 
-                System.out.println("message from"+ m.src+ " to "+ m.dst+ "with history P"+item.id +" to P" + pid);
+                // System.out.println("message from"+ m.src+ " to "+ m.dst+ "with history P"+item.id +" to P" + pid);
              
                 return !VectorClock.isbehind(clock, m.timestamp);
             }

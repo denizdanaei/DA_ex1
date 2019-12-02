@@ -25,7 +25,7 @@ public class VectorClock {
 		{
 			if (p.vector[i] < m.vector[i])
 			{
-                System.out.println(p.vector[i]+"is behind " + m.vector[i]);
+                // System.out.println(p.vector[i]+"is behind " + m.vector[i]);
                 return true;
 			}
 		}

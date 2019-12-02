@@ -27,17 +27,14 @@ public class Process {
 
     public void onReceiveEvent(Message m) {
         
+        System.out.println("P"+id+" RECEIVE FROM P"+m.src);
         if (!HistoryList.deliveryTest(id, clock, m)) {
-            
-            System.out.println(m.src +" to " +m.dst +"cannot be delivered");
-             
+            System.out.println("CAN'T DELIVER\n");
             msgBuffer.add(m);               // Push message to msgBuffer is delivery test failed
             return;
         }
 
-        onDeliverEvent(m);        
-        System.out.println(m.src +" to " +m.dst +"will now be delivered");
-        // System.out.println("P"+id+" Delivered");
+        onDeliverEvent(m);
         printState();
 
         if (!msgBuffer.isEmpty()) {
@@ -73,6 +70,6 @@ public class Process {
     // Debugging helpers
     public void printState() {
         System.out.println("clock: "+clock.toString());
-        System.out.println("history: "+history.toString()+"\n");
+        System.out.println("history: \n"+history.toString()+"\n");
     }
 }
