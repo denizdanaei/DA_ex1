@@ -7,7 +7,7 @@ import subprocess
 javaFiles = [file for file in os.listdir() if os.path.splitext(file)[1] == '.java']
 
 # Compile
-print(f"Compiling {['javac'] + javaFiles}")
+print(f"Compiling {javaFiles}")
 subprocess.run(['javac'] + javaFiles)
 
 # Run
