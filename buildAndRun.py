@@ -4,15 +4,12 @@ import os
 import subprocess
 
 # Find all .java files in folder
-javaFiles = []
-for file in os.listdir():
-    base, ext = os.path.splitext(file)
-    if ext == '.java':
-        javaFiles.append(file)
+javaFiles = [file for file in os.listdir() if os.path.splitext(file)[1] == '.java']
 
 # Compile
-print(f"Compiling: {['javac'] + javaFiles}")
+print(f"Compiling {['javac'] + javaFiles}")
 subprocess.run(['javac'] + javaFiles)
 
 # Run
+print("Running")
 subprocess.run(['java', 'Main'])
