@@ -26,7 +26,7 @@ public class Process {
     public void onReceiveEvent(Message m) {
         
         System.out.println("P"+id+" RECEIVE FROM P"+m.src);
-        if (!HistoryList.deliveryTest(id, clock, m)) {
+        if (!deliveryTest(m)) {
             System.out.println("CAN'T DELIVER\n");
             msgBuffer.add(m);
             return;
