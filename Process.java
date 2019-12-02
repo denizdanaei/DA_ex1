@@ -26,6 +26,7 @@ public class Process {
     public void onReceiveEvent(Message m) {
         
         System.out.println("P"+id+" RECEIVE FROM P"+m.src);
+
         if (!deliveryTest(m)) {
             System.out.println("CAN'T DELIVER\n");
             msgBuffer.add(m);
@@ -34,7 +35,6 @@ public class Process {
 
         onDeliverEvent(m);
         printState();
-
         if (!msgBuffer.isEmpty()) {
             onReceiveEvent(msgBuffer.remove(0));    // Pop message from msgBuffer
         }
@@ -42,6 +42,7 @@ public class Process {
 
     public void onDeliverEvent(Message m) {
         clockTick();
+        System.out.println("P"+id+" DELIVERY FROM P"+m.src);
         // VectorClock.max(vectorClk, m.vectorClk); //uncomment when problem is fixed
         // System.out.println("P"+this.id+" Delivered MESSAGE TO P" + m.dst+" "+ VectorClock.toString(vectorClk));
         //deleting outdated history items
@@ -67,8 +68,14 @@ public class Process {
     */
 
 
-    private boolean deliveryTest(Message m) {
-        // for (HistoryItem)
+    private boolean deliveryTest(Message msg) {
+        for (HistoryItem msgHistItem : msg.history) {
+            if (this.id == msgHistItem.id) {    // Check for your ID inside message's history
+                if (VectorClock.isbehind(this.clock, msgHistItem.timestamp)) {  // TODO: convert to non-static function
+                    return false;
+                }
+            }
+        }
         return true;
     }
 
