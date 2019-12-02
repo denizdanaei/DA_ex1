@@ -5,23 +5,21 @@ public class Process {
     
     public int id;
     public VectorClock clock;
-    public HistoryList history;
+    public List<HistoryItem> history;
     public List<Message> msgBuffer;
 
     public Process(int id, int numProcesses) {
         this.id = id;
         this.clock = new VectorClock(numProcesses);
-        this.history = new HistoryList();
+        this.history = new ArrayList<HistoryItem>();
         this.msgBuffer = new ArrayList<Message>();
     }
 
     public void onSendEvent(Message m) {
         System.out.println("P"+id+" SEND to P"+ m.dst);
-        clockTick();                    // Increase local clock
-        m.addTimestamp(clock);          // Add timestamp and history to message
-        m.addHistory(this.history);
-        history.add(m.dst, clock);      // Update history list
-        //add or update(if there is an item with same id, update)
+        clockTick();                                     // Increase local clock
+        m.addMetadata(clock, history);                   // Add timestamp and history to message
+        updateHistory(m.dst, clock);
         printState();
     }
 
@@ -68,13 +66,27 @@ public class Process {
     }
     */
 
-    void clockTick() {
+
+    private boolean deliveryTest(Message m) {
+        // for (HistoryItem)
+        return true;
+    }
+
+    private void updateHistory(int id, VectorClock timestamp) {
+        // TODO: check if entry for given id already exists and do magic
+        this.history.add(new HistoryItem(id, timestamp));
+    }
+
+    private void clockTick() {
         this.clock.increase(this.id - 1);
     }
 
     // Debugging helpers
     public void printState() {
         System.out.println("clock: "+clock.toString());
-        System.out.println("history: \n"+history.toString()+"\n");
+        for (HistoryItem i : history) {
+            System.out.println("P"+i.id+" "+i.timestamp.toString());
+        }
+        System.out.println();
     }
 }

@@ -1,21 +1,21 @@
+import java.util.List;
+import java.util.ArrayList;
+
 public class Message {
 
     public int src;
     public int dst;
     public VectorClock timestamp;
-    public HistoryList history;
+    public List<HistoryItem> history;
 
     public Message(int src, int dst) {
         this.src = src;
         this.dst = dst;
     }
 
-    public void addTimestamp(VectorClock timestamp) {
-        this.timestamp = timestamp;
-    }
-
-    public void addHistory(HistoryList history) {
-        this.history = history;
+    public void addMetadata(VectorClock timestamp, List<HistoryItem> history) {
+        this.timestamp = new VectorClock(timestamp);            // Copy timestamp
+        this.history = new ArrayList<HistoryItem>(history);     // Copy history
     }
 
     // Helper function
