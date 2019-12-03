@@ -16,7 +16,7 @@ public class VectorClock {
     }
 
     public String toString() {
-        return Arrays.toString(vector);    
+        return Arrays.toString(this.vector);    
     }
 
     public static boolean isbehind(VectorClock p, VectorClock m)
@@ -26,29 +26,18 @@ public class VectorClock {
 		{
 			if (p.vector[i] < m.vector[i])
 			{
-                // System.out.println(p.vector[i]+"is behind " + m.vector[i]);
                 return true;
 			}
 		}
 		return false;
-	}
-	
-    // this is now in tick()
-    // public void setOnSendEvent(int id){
-    //     vectorClock[id-1]++;
-    // }
-
-    // public void setOnDeliverEvent(int id, VectorClock m){
-    //     vectorClock[id]++;
-    //     for (int i = 0; i < vectorClock.length; i++)
-	// 	{
-	// 		if (vectorClock1[i] < vectorClock2[i])
-	// 			max[i] = vectorClock2[i];
-	// 	}
-	// 	return max;
-    // }
+    }
     
-	// public static int [] update_vectorClk(int[] vectorClock1, int[] vectorClock2) {
-    //     return vectorClock1;
-    // }
+    public void setToMaximum(VectorClock clock) {
+        for (int i = 0; i < this.vector.length; i++) {
+            if (this.vector[i] < clock.vector[i]) {
+                this.vector[i] = clock.vector[i];
+            }
+        }
+    }
+	
 }

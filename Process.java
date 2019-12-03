@@ -26,51 +26,42 @@ public class Process {
     public void onReceiveEvent(Message m) {
         
         System.out.println("P"+id+" RECEIVE FROM P"+m.src);
-
         if (!deliveryTest(m)) {
             System.out.println("CAN'T DELIVER\n");
             msgBuffer.add(m);
             return;
         }
-
         onDeliverEvent(m);
-        printState();
+        // printState();
         if (!msgBuffer.isEmpty()) {
             onReceiveEvent(msgBuffer.remove(0));    // Pop message from msgBuffer
         }
     }
 
     public void onDeliverEvent(Message m) {
+        System.out.println("P"+id+" DELIVERY FROM P"+m.src+"\n");
         clockTick();
-        System.out.println("P"+id+" DELIVERY FROM P"+m.src);
-        // VectorClock.max(vectorClk, m.vectorClk); //uncomment when problem is fixed
-        // System.out.println("P"+this.id+" Delivered MESSAGE TO P" + m.dst+" "+ VectorClock.toString(vectorClk));
+        clockUpdate(m.timestamp);
         //deleting outdated history items
     
     }
 
-    private void updateHistoryBuffer(){}
-
-    /*public boolean deliveryTest(Message m) {
-
-        if(HistoryList.historycheck(Process, m))
-            {return false;}
-        // TODO
-        //iterate through history
-        //if history item with dest. id
-            //check the timestamp
-            //if dest. timestamp behind the msg timestamp
-                //reject
-            //else
-                //accept
-        return true;
-    }
-    */
-
-
     private boolean deliveryTest(Message msg) {
+
+        // Print history
+        System.out.println("DELIVERY TEST");
+        System.out.println("\tclock "+clock.toString());
+        System.out.println("\tMessage history: ");
         for (HistoryItem msgHistItem : msg.history) {
-            if (this.id == msgHistItem.id) {    // Check for your ID inside message's history
+            System.out.println("\t\tP"+msgHistItem.id+" "+msgHistItem.timestamp.toString());
+        }
+
+        for (HistoryItem msgHistItem : msg.history) {
+            Integer a = Integer.valueOf(this.id);
+            Integer b = Integer.valueOf(msgHistItem.id);
+            // System.out.println("A: "+a+" B: "+b);
+            if (a.equals(b)) {    // Check for your ID inside message's history
+                System.out.println("HISTORY ENTRY DETECTED");
                 if (VectorClock.isbehind(this.clock, msgHistItem.timestamp)) {  // TODO: convert to non-static function
                     return false;
                 }
@@ -88,11 +79,15 @@ public class Process {
         this.clock.increase(this.id - 1);
     }
 
+    private void clockUpdate(VectorClock clock) {
+        this.clock.setToMaximum(clock);
+    }
+
     // Debugging helpers
     public void printState() {
         System.out.println("clock: "+clock.toString());
         for (HistoryItem i : history) {
-            System.out.println("P"+i.id+" "+i.timestamp.toString());
+            // System.out.println("P"+i.id+" "+i.timestamp.toString());
         }
         System.out.println();
     }
