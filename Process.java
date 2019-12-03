@@ -24,12 +24,15 @@ public class Process {
     }
 
     public void onReceiveEvent(Message m) {
+        
         System.out.println("P"+id+" RECEIVE FROM P"+m.src);
+
         if (!deliveryTest(m)) {
             System.out.println("CAN'T DELIVER\n");
             msgBuffer.add(m);
             return;
         }
+
         onDeliverEvent(m);
         printState();
         if (!msgBuffer.isEmpty()) {
@@ -39,7 +42,6 @@ public class Process {
 
     public void onDeliverEvent(Message m) {
         clockTick();
-        clockUpdate(m.timestamp);
         System.out.println("P"+id+" DELIVERY FROM P"+m.src);
         // VectorClock.max(vectorClk, m.vectorClk); //uncomment when problem is fixed
         // System.out.println("P"+this.id+" Delivered MESSAGE TO P" + m.dst+" "+ VectorClock.toString(vectorClk));
@@ -80,11 +82,6 @@ public class Process {
     private void updateHistory(int id, VectorClock timestamp) {
         // TODO: check if entry for given id already exists and do magic
         this.history.add(new HistoryItem(id, timestamp));
-    }
-
-    private void clockUpdate(VectorClock clk) {
-        // Clockwise maximum (per element, take max of the two)
-        for (int i : this.clock)
     }
 
     private void clockTick() {
