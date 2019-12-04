@@ -27,7 +27,7 @@ public class Process {
         
         System.out.println("P"+id+" RECEIVE FROM P"+m.src);
         if (!deliveryTest(m)) {
-            System.out.println("CAN'T DELIVER\n");
+            System.out.println("\tCAN'T DELIVER\n");
             msgBuffer.add(m);
             return;
         }
@@ -42,25 +42,20 @@ public class Process {
         System.out.println("P"+id+" DELIVERY FROM P"+m.src+"\n");
         clockTick();
         clockUpdate(m.timestamp);
+        
+        // Copy message history to local history
+        for (HistoryItem i : m.history) {
+            updateHistory(i.id, i.timestamp);
+        }
+
         //deleting outdated history items
     
     }
 
     private boolean deliveryTest(Message msg) {
 
-        // Print history
-        System.out.println("DELIVERY TEST");
-        System.out.println("\tclock "+clock.toString());
-        System.out.println("\tMessage history: ");
         for (HistoryItem msgHistItem : msg.history) {
-            System.out.println("\t\tP"+msgHistItem.id+" "+msgHistItem.timestamp.toString());
-        }
-
-        for (HistoryItem msgHistItem : msg.history) {
-            Integer a = Integer.valueOf(this.id);
-            Integer b = Integer.valueOf(msgHistItem.id);
-            // System.out.println("A: "+a+" B: "+b);
-            if (a.equals(b)) {    // Check for your ID inside message's history
+            if (this.id == msgHistItem.id) {
                 System.out.println("HISTORY ENTRY DETECTED");
                 if (VectorClock.isbehind(this.clock, msgHistItem.timestamp)) {  // TODO: convert to non-static function
                     return false;
@@ -71,7 +66,12 @@ public class Process {
     }
 
     private void updateHistory(int id, VectorClock timestamp) {
-        // TODO: check if entry for given id already exists and do magic
+        for (HistoryItem item : history) {      // Check if entry with this PID already exists
+            if (this.id == item.id) {
+                System.out.println("HISTORY ENTRY COLLISION!");     // TODO implement correct thing here
+                return;
+            }
+        }
         this.history.add(new HistoryItem(id, timestamp));
     }
 
